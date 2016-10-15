@@ -36,5 +36,16 @@ while ~feof(fid)
     dictionary(end+1,1:2) = cat(1,tline{:});
 end
 
+train_Multinomial(dictionary, tData);
 
-
+function train_Multinomial(dictionary, tData)
+    isH = sum(sum(strcmp(tData, {'HillaryClinton'}),2));
+    prior_H = isH/length(tData);
+    prior_D = ~prior_H;
+    
+    word_likelihoods = cell(0,1);
+    for i = 1:length(dictionary)
+        
+    end
+    
+end
