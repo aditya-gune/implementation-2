@@ -17,7 +17,18 @@ lline = fgetl(lfile);
 tData = cell(0,1);
 lData = cell(0,1);
 while ischar(tline)
-    tData{end+1,1} = tline;
+    i = 1;
+    tarray = textscan(tline,'%f');
+    for i = 1:size(tarray{i},1)
+        tarray = [tarray, tarray{1}(i,1)];
+        %tData{end+1,2} = tarray{1}(i,1);
+    end
+    i = i + 1;
+    j = j + 1;
+    tarray(1) = [];
+    tData{end+1,1} = tarray;
+    %t_length = size(tarray);
+    %tData{end+1,1:t_length(2)} = tarray(1:t_length(2));
     lData{end+1,1} = lline;
     tline = fgetl(tfile);
     lline = fgetl(lfile);
@@ -36,27 +47,35 @@ while ~feof(fid)
     dictionary(end+1,1:2) = cat(1,tline{:});
 end
 
-train_Multinomial(dictionary, tData);
-
-function train_Multinomial(dictionary, tData)
-    isH = sum(sum(strcmp(tData, {'HillaryClinton'}),2));
-    HTweets = []
-    DTweets = []
+    wordcount = zeros(length(dictionary), 2);
     for j = 1:length(tData)
-        if findstr(tData{j}, 'HillaryClinton')
-            disp('found')
-        end 
-    end
-    %prior_H = isH/length(tData);
-    %prior_D = ~prior_H;
-    cProb = zeros(length(dictionary), 3);
-    for i = 1:length(dictionary)
-        targetWord = dictionary(i);
-        for j = 1:length(tData)
-            %if tweet is hillary's
-            if 
-        end
-        
-    end
-    
-end
+        y=1;
+        for y=1:size(tData{y},2) %itterate through one tweet
+            words = tData{y}; %get tweet as a matrix
+            disp('-------------');
+            disp('tweet is:');
+            disp(words);
+            for z=1:size(words,2) %iterate thru matrix
+                
+                if strcmp(tData(j,2), 'HillaryClinton')
+                    %disp('----');
+                    %disp('WORD IS:')
+                    %disp(int32(words{z}))
+                    %wordcount(int32(words{z}),1)
+                    wordcount(int32(words{z}),1) = wordcount(int32(words{z}),1) + 1;
+                    %disp('AFTER INCREMENT:')
+                    %disp(wordcount(int32(words{z}),1))
+                else
+                    %disp('WORD IS:')
+                    %disp(int32(words{z}))
+                    %wordcount(int32(words{z}),2)
+                    wordcount(int32(words{z}),2) = wordcount(int32(words{z}),2) + 1;
+                    %disp('AFTER INCREMENT:')
+                    %disp(wordcount(int32(words{z}),2))
+                end
+                
+            end %end of this tweet (as a matrix)
+        %j = j + 1 
+        end %end of this tweet
+      
+    end %end of this element in tData (1 tweet)
