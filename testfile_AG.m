@@ -40,11 +40,22 @@ train_Multinomial(dictionary, tData);
 
 function train_Multinomial(dictionary, tData)
     isH = sum(sum(strcmp(tData, {'HillaryClinton'}),2));
-    prior_H = isH/length(tData);
-    prior_D = ~prior_H;
-    
-    word_likelihoods = cell(0,1);
+    HTweets = []
+    DTweets = []
+    for j = 1:length(tData)
+        if findstr(tData{j}, 'HillaryClinton')
+            disp('found')
+        end 
+    end
+    %prior_H = isH/length(tData);
+    %prior_D = ~prior_H;
+    cProb = zeros(length(dictionary), 3);
     for i = 1:length(dictionary)
+        targetWord = dictionary(i);
+        for j = 1:length(tData)
+            %if tweet is hillary's
+            if 
+        end
         
     end
     
