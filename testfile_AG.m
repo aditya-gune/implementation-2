@@ -1,8 +1,5 @@
 %implementation assignment 2
 dir = 'D:\Aditya\Desktop\School\OSU\MS\Term 1\CS534 - Machine Learning\Implementation 2';
-%'D:\Aditya\Desktop\School\OSU\MS\Term 1\CS534 - Machine Learning\Implementation 2\clintontrump.bagofwords.train'
-%'D:\Aditya\Desktop\School\OSU\MS\Term 1\CS534 - Machine Learning\Implementation 2\clintontrump.labels.train'
-
 
 %make dynamic later
 n=6000;
@@ -47,6 +44,25 @@ while ~feof(fid)
     dictionary(end+1,1:2) = cat(1,tline{:});
 end
 
+%BERNOULLI IMPLEMENTATION
+    wordcount = zeros(length(dictionary), 2);
+    for j = 1:length(tData) 
+        disp('-------------');
+        disp(j)
+        disp(tData(j,2))
+        words = tData{j};
+        for z=1:size(words,2) %iterate thru matrix
+            if strcmp(tData(j,2), 'HillaryClinton')
+                if int32(words{z}) > 0
+                    wordcount(int32(words{z}),1) = 1;
+                end
+            else
+                if int32(words{z}) > 0
+                    wordcount(int32(words{z}),2) = 1;
+                end
+            end
+        end %end of this tweet (as a matrix)
+    end %end of this element in tData (1 tweet)
 
 %MULTINOMIAL IMPLEMENTATION
     wordcount = zeros(length(dictionary), 2);
@@ -67,3 +83,6 @@ end
             end
         end %end of this tweet (as a matrix)
     end %end of this element in tData (1 tweet)
+    
+    
+    
