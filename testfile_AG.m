@@ -53,20 +53,20 @@ end
         disp('-------------');
         disp(j)
         disp(tData(j,2))
-        words = tData{j};
+        words = tData{j}
         %for y=1:size(tData{y},2) %itterate through one tweet
             %words = tData{y}; %get tweet as a matrix
             %disp(words);
             for z=1:size(words,2) %iterate thru matrix
                 
                 if strcmp(tData(j,2), 'HillaryClinton')
-                    
-                    wordcount(int32(words{z}),1) = wordcount(int32(words{z}),1) + 1;
-                    
+                    if int32(words{z}) > 0
+                        wordcount(int32(words{z}),1) = wordcount(int32(words{z}),1) + 1;
+                    end
                 else
-                    
-                    wordcount(int32(words{z}),2) = wordcount(int32(words{z}),2) + 1;
-                   
+                    if int32(words{z}) > 0
+                        wordcount(int32(words{z}),2) = wordcount(int32(words{z}),2) + 1;
+                    end
                 end
                 
             end %end of this tweet (as a matrix)
