@@ -49,33 +49,28 @@ end
 
     wordcount = zeros(length(dictionary), 2);
     for j = 1:length(tData)
-        y=1;
-        for y=1:size(tData{y},2) %itterate through one tweet
-            words = tData{y}; %get tweet as a matrix
-            disp('-------------');
-            disp('tweet is:');
-            disp(words);
+       
+        disp('-------------');
+        disp(j)
+        disp(tData(j,2))
+        words = tData{j};
+        %for y=1:size(tData{y},2) %itterate through one tweet
+            %words = tData{y}; %get tweet as a matrix
+            %disp(words);
             for z=1:size(words,2) %iterate thru matrix
                 
                 if strcmp(tData(j,2), 'HillaryClinton')
-                    %disp('----');
-                    %disp('WORD IS:')
-                    %disp(int32(words{z}))
-                    %wordcount(int32(words{z}),1)
+                    
                     wordcount(int32(words{z}),1) = wordcount(int32(words{z}),1) + 1;
-                    %disp('AFTER INCREMENT:')
-                    %disp(wordcount(int32(words{z}),1))
+                    
                 else
-                    %disp('WORD IS:')
-                    %disp(int32(words{z}))
-                    %wordcount(int32(words{z}),2)
+                    
                     wordcount(int32(words{z}),2) = wordcount(int32(words{z}),2) + 1;
-                    %disp('AFTER INCREMENT:')
-                    %disp(wordcount(int32(words{z}),2))
+                   
                 end
                 
             end %end of this tweet (as a matrix)
         %j = j + 1 
-        end %end of this tweet
+        %end %end of this tweet
       
     end %end of this element in tData (1 tweet)
