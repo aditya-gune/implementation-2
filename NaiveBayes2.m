@@ -82,9 +82,14 @@ end
 [tweetCount_H, tweetCount_D] = countTweets(tData);
 
 %PRIORS AND OVERFITTING
-[wc, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tData, dictionary, alpha);
-[testResults, correct_H, incorrect_H, correct_D, incorrect_D] = testFunction(testData, wc, bernoulli, tweetCount_H, tweetCount_D, testlabelarray);
-
+alphas = [10e-5, 10e-4, 10e-3, 10e-2, 1];
+accArr = zeros(5,1);
+for x=1:length(alphas)
+    [wc, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tData, dictionary, alphas(x));
+    [testResults, accuracy] = testFunction(testData, wc, bernoulli, tweetCount_H, tweetCount_D, testlabelarray);
+    accArr(x) = accuracy;
+    
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -150,7 +155,7 @@ function [wordcount, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tD
 end
 
 
-function [testResults, correct_H, incorrect_H, correct_D, incorrect_D] = testFunction(testData, wc, trainingModel, tweetCount_H, tweetCount_D, testlabelarray)
+function [testResults, accuracy] = testFunction(testData, wc, trainingModel, tweetCount_H, tweetCount_D, testlabelarray)
     fid = fopen('results.txt', 'w');
     
     testResults = zeros(length(testData),1);
@@ -210,14 +215,14 @@ function [testResults, correct_H, incorrect_H, correct_D, incorrect_D] = testFun
         end
         fprintf(fid, '%s\n', owner);
     end
-disp(numCorrect/length(testData));
-disp('Correct Hillary');
-disp(correct_H);
-disp('Incorrect Hillary');
-disp(incorrect_H);
-disp('Correct Trump');
-disp(correct_D);
-disp('Incorrect Trump');
-disp(incorrect_D);
+accuracy = (numCorrect/length(testData))
+% disp('Correct Hillary');
+% disp(correct_H);
+% disp('Incorrect Hillary');
+% disp(incorrect_H);
+% disp('Correct Trump');
+% disp(correct_D);
+% disp('Incorrect Trump');
+% disp(incorrect_D);
 fclose(fid);
 end
