@@ -44,7 +44,10 @@ while ~feof(fid)
     dictionary(end+1,1:2) = cat(1,tline{:});
 end
 
+
+[wc, wc_H,wc_D] = trainMultinomial(tData, dictionary);
 %BERNOULLI IMPLEMENTATION
+function wordcount = trainBernoulli(tData, dictionary)
     wordcount = zeros(length(dictionary), 2);
     for j = 1:length(tData) 
         disp('-------------');
@@ -63,14 +66,21 @@ end
             end
         end %end of this tweet (as a matrix)
     end %end of this element in tData (1 tweet)
+    
+end
 
 %MULTINOMIAL IMPLEMENTATION
-    wordcount = zeros(length(dictionary), 2);
+function [wordcount, wc_H, wc_D] = trainMultinomial(tData, dictionary)
+    wc_H = 0;
+    wc_D = 0;
+    wordcount = zeros(length(dictionary), 4);
     for j = 1:length(tData) 
-        disp('-------------');
-        disp(j)
-        disp(tData(j,2))
         words = tData{j};
+        if strcmp(tData(j,2), 'HillaryClinton')
+            wc_H = wc_H + size(tData(j));
+        else
+            wc_D = wc_D + size(tData(j));
+        end
         for z=1:size(words,2) %iterate thru matrix
             if strcmp(tData(j,2), 'HillaryClinton')
                 if int32(words{z}) > 0
@@ -84,5 +94,25 @@ end
         end %end of this tweet (as a matrix)
     end %end of this element in tData (1 tweet)
     
+    %get prob distribution
+    for x=1:length(wordcount)
+        %populate p(x_i|y=hillary)
+        num = wordcount(x,1) + 1; %laplace smoothing
+        denom = (wc_H + length(wordcount));
+        denom = denom(1);
+        wordcount(x,3) = num/denom(1);
+        
+        %populate p(x_i|y=trump)
+        num = wordcount(x,2) + 1; %laplace smoothing
+        denom = (wc_D + length(wordcount));
+        denom = denom(1);
+        wordcount(x,4) = num/denom(1);
+        
+    end
     
+end
+    
+function testMultinomial()
+
+end
     
