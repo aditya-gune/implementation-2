@@ -44,17 +44,19 @@ while ~feof(fid)
     dictionary(end+1,1:2) = cat(1,tline{:});
 end
 
-[wc, twc_H, twc_D] = trainBernoulli(tData, dictionary);
+%[wc, twc_H, twc_D] = trainBernoulli(tData, dictionary);
 [wc, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tData, dictionary);
 %BERNOULLI IMPLEMENTATION
 function [wordcount, tweetCount_H, tweetCount_D] = trainBernoulli(tData, dictionary)
     wordcount = zeros(length(dictionary), 2);
     tweetCount_H = 0;
     tweetCount_D = 0;
+    log_pdist_H = 0;
+    log_pdist_D = 0;
     for j = 1:length(tData) 
-        disp('-------------');
-        disp(j)
-        disp(tData(j,2))
+        %disp('-------------');
+        %disp(j)
+        %disp(tData(j,2))
         words = tData{j};
         if strcmp(tData(j,2), 'HillaryClinton')
             tweetCount_H = tweetCount_H + 1;
@@ -73,6 +75,25 @@ function [wordcount, tweetCount_H, tweetCount_D] = trainBernoulli(tData, diction
             end
         end %end of this tweet (as a matrix)
     end %end of this element in tData (1 tweet)
+    
+    %get prob distribution
+    for x=1:length(wordcount)
+        %populate p(x_i|y=hillary)
+        num = wordcount(x,1); %laplace smoothing
+        %denom = tweetCount_H;
+        %denom = denom(1);
+        wordcount(x,3) = (num+1)/(tweetCount_H + 2); %Laplace smoothing
+        disp(log(wordcount(x,3)));
+        log_pdist_H = log_pdist_H + log(wordcount(x,3));
+        
+        %populate p(x_i|y=trump)
+        num = wordcount(x,2); 
+        %denom = tweetCount_D;
+        %denom = denom(1);
+        wordcount(x,4) = (num + 1)/(tweetCount_D + 2); %Laplace smoothing
+        log_pdist_D = log_pdist_D + log(wordcount(x, 4));
+        
+    end
     
 end
 
@@ -102,7 +123,6 @@ function [wordcount, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tD
             end
         end %end of this tweet (as a matrix)
     end %end of this element in tData (1 tweet)
-    
     %get prob distribution
     for x=1:length(wordcount)
         %populate p(x_i|y=hillary)
@@ -125,6 +145,6 @@ function [wordcount, wc_H, wc_D, log_pdist_H, log_pdist_D] = trainMultinomial(tD
 end
     
 function testMultinomial()
-
+    
 end
     
